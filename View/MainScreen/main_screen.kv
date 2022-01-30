@@ -1,0 +1,24 @@
+#:import images_path kivymd.images_path
+
+
+<MainScreenView>
+
+    FitImage:
+        source: f"{images_path}black.png"
+
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDToolbar:
+            title: "ComicRackAPIServer v2"
+            right_action_items: [["web", lambda x: x]]
+
+        MDFloatLayout:
+
+            
+               
+
+    MDFillRoundFlatButton:
+        text: "Load ComicRack DB xml file"
+        on_release: root.controller.on_tap_button_login()
+        pos_hint: {"center_x": .5, "center_y": .1}
