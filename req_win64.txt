@@ -1,0 +1,24 @@
+certifi==2021.10.8
+charset-normalizer==2.0.11
+docutils==0.18.1
+flake8==4.0.1
+idna==3.3
+infi.systray==0.1.12
+Kivy==2.0.0
+kivy-deps.angle==0.3.1
+kivy-deps.glew==0.3.0
+kivy-deps.sdl2==0.3.1
+Kivy-examples==2.0.0
+Kivy-Garden==0.1.4
+kivymd @ https://github.com/kivymd/KivyMD/archive/master.zip
+mccabe==0.6.1
+peewee==3.14.8
+Pillow==9.0.0
+pycodestyle==2.8.0
+pyflakes==2.4.0
+Pygments==2.11.2
+pypiwin32==223
+pywin32==303
+requests==2.27.1
+urllib3==1.26.8
+watchdog==2.1.6

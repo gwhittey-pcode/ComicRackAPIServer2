@@ -1,3 +1,14 @@
-kivy==2.0.0
-kivymd==1.0.0
+watchdogcertifi==2021.10.8
+charset-normalizer==2.0.10
+docutils==0.18.1
+idna==3.3
+infi.systray==0.1.12
+Kivy==2.0.0
+Kivy-Garden==0.1.4
+kivymd @ https://github.com/kivymd/KivyMD/archive/master.zip
+peewee==3.14.8
+Pillow==9.0.0
+Pygments
+requests
+urllib3
 watchdog
