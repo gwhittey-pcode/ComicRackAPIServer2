@@ -97,7 +97,7 @@ api2_env/
 
 # mkdocs documentation
 /site
-
+ComicRackAPIServer2.db
 # mypy
 .mypy_cache/
 

@@ -15,7 +15,8 @@ from typing import NoReturn
 
 from kivy import Config
 from kivy.uix.screenmanager import ScreenManager
-
+from applib.db_functions import start_db
+from infi.systray import SysTrayIcon
 from PIL import ImageGrab
 
 # TODO: You may know an easier way to get the size of a computer display.
@@ -51,13 +52,15 @@ class ComicRackAPIServer2(MDApp):
         """
 
         import View.screens
-
+        start_db()
         self.theme_cls.primary_palette = "Orange"
         self.manager_screens = ScreenManager()
         Window.bind(on_key_down=self.on_keyboard_down)
         importlib.reload(View.screens)
         screens = View.screens.screens
-
+        menu_options = (("Say Hello", None, self.say_hello),)
+        systray = SysTrayIcon("icon.ico", "Example tray icon", menu_options)
+        systray.start()
         for i, name_screen in enumerate(screens.keys()):
             model = screens[name_screen]["model"]()
             controller = screens[name_screen]["controller"](model)
@@ -67,7 +70,7 @@ class ComicRackAPIServer2(MDApp):
             self.manager_screens.add_widget(view)
 
         return self.manager_screens
-
+        
     def on_keyboard_down(self, window, keyboard, keycode, text, modifiers) -> NoReturn:
         """
         The method handles keyboard events.
@@ -78,6 +81,8 @@ class ComicRackAPIServer2(MDApp):
 
         if "meta" in modifiers or "ctrl" in modifiers and text == "r":
             self.rebuild()
+    def say_hello(self,systray):
+        print ("Hello, World!")
 
 
 ComicRackAPIServer2().run()
