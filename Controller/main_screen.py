@@ -8,6 +8,8 @@ from kivymd.utils import asynckivy
 from applib.dialogs.dialogs import DialogLoadKvFiles
 from xml.dom.minidom import parse
 from applib.db_functions import Comic, start_db
+import xmltodict
+
 # We have to manually reload the view module in order to apply the
 # changes made to the code on a subsequent hot reload.
 # If you no longer need a hot reload, you can delete this instruction.
@@ -35,34 +37,38 @@ class MainScreenController:
     def load_xml_data(self, path):
         import os
         if os.path.exists("ComicRackAPIServer2.db"):
-            os.remove("ComicRackAPIServer2.db")
-            start_db()
+            Comic.drop_table()
+            Comic.create_table()
         else:
             print("The file does not exist")
         async def _load_xml_data():
             await asynckivy.sleep(0)
-            datasource = open(path)
-            dom2 = parse(datasource)  # parse an open file
-            books = dom2.getElementsByTagName("Book")
-            i = 1
+            # Load the xml file
+            datasource = open(path,"r")
+            xml_content= datasource.read()
+            my_ordered_dict=xmltodict.parse(path)
+            root = my_ordered_dict['ComicDatabase']
+            books = root['Books']['Book']
+            #dom2 = parse(datasource)  # parse an open file
+            #books = dom2.getElementsByTagName("Book") # get <Books>
+            #comiclists = dom2.getElementsByTagName("Item")
             totalCount = len(books)
             self.dialog_load_comicrack_data.text_method = "Loading Books"
             for book in books:
                 await asynckivy.sleep(0)
                 number = 0
-                sId = book.getAttribute('Id')
-                number = get_node(book,"Number")
-                sfile = book.getAttribute('File')
-                series =  get_node(book,"Series")
-                volume =  get_node(book,"Volume")
-                year = get_node(book,"Year")
-                month = get_node(book,"Month")
-                pagecount = get_node(book, "PageCount")
-                currentpage = get_node(book,"CurrentPage")
-                lastpageread = get_node(book,"LastPageRead")
-                summary = get_node(book,"Summary")
+                sId = book['@Id']
+                number = book['Number']
+                sfile = book['@File']
+                series =  book['Series']
+                volume =  book['Volume']
+                year = book['Year']
+                month = book['Month']
+                pagecount = book['PageCount']
+                currentpage = book['CurrentPage']
+                lastpageread = book['LastPageRead']
+                summary = book['Summary']
                 print(f'ID={sId} File={sfile} Number={number}')
-                
                 comic, created = Comic.get_or_create(
                     Id = sId,
                     Number = number,
@@ -85,6 +91,21 @@ class MainScreenController:
                     print ("created")
                 else:
                     print ("not created")
+            # self.dialog_load_comicrack_data.text_method = "Loading Reading Lists"
+            # totalCount = len(comiclists)
+            # i = 1
+            # for item in comiclists:
+            #     print("##########################################")
+            #     print(f"item {item}")
+            #     await asynckivy.sleep(0)
+            #     sId = item.getAttribute('Id')
+            #     stype = item.getAttribute("xsi:type")
+            #     print(f"ID:{sId} type:{stype}")
+            #     self.dialog_load_comicrack_data.name_kv_file = f"{sId}\n {series} #{number} volume:{volume} "
+            #     self.dialog_load_comicrack_data.percent = str(
+            #         i * 100 // int(totalCount)
+            #     )
+            #     i += 1
             self.dialog_load_comicrack_data.dismiss()
         asynckivy.start(_load_xml_data())
     def on_tap_fmopen(self) -> NoReturn:
