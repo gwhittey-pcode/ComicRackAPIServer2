@@ -46,7 +46,7 @@ class MainScreenController:
             # Load the xml file
             datasource = open(path,"r")
             xml_content= datasource.read()
-            my_ordered_dict=xmltodict.parse(path)
+            my_ordered_dict=xmltodict.parse(xml_content)
             root = my_ordered_dict['ComicDatabase']
             books = root['Books']['Book']
             #dom2 = parse(datasource)  # parse an open file
